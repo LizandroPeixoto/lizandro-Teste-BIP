@@ -1,0 +1,505 @@
+{
+  "rules": [
+    {
+      "id": "cnpj-generic-election",
+      "description": "Generic election of CNPJ candidate variables (works across all languages)",
+      "severity": "info",
+      "type": "prompt",
+      "languages": [
+        "java",
+        "javascript",
+        "typescript",
+        "tsx",
+        "jsx",
+        "sql",
+        "vb",
+        "vb6",
+        "python",
+        "csharp",
+        "html",
+        "xml",
+        "json",
+        "yaml",
+        "webmethods"
+      ],
+      "prompt": "prompts/cnpj-generic-election.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, review the field '{fieldName}' identified as a CNPJ candidate. Ensure it supports alphanumeric format (XX.XXX.XXX/XXXX-XX where first 12 chars can be alphanumeric). If it's currently numeric or restricted to digits only, migrate to String type with appropriate validation pattern: ^[A-Z0-9]{12}[0-9]{2}$"
+    },
+    {
+      "id": "cnpj-java-specialist",
+      "description": "Detects CNPJ fields in Java that should be String (alphanumeric) instead of numeric types",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "prompt": "prompts/cnpj-java-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ field '{fieldName}' from numeric type (Integer/Long/BigInteger) to String to support alphanumeric CNPJ format (XX.XXX.XXX/XXXX-XX). Propagate this change across the project: update constructors, builders, getters/setters, validation logic (use pattern ^[A-Z0-9]{12}[0-9]{2}$), equals/hashCode, toString, mappers/DTOs, JSON/XML serialization, persistence annotations (JPA/Hibernate - use @Column(length=14) instead of precision/scale), SQL/JPQL queries, and all usage sites. Remove numeric conversions (Long.parseLong, etc.) and arithmetic operations. Keep the field name unchanged, adjust only the type and dependent code. Ensure the project compiles after the change."
+    },
+    {
+      "id": "cnpj-js-ts-frontend-specialist",
+      "description": "Detects CNPJ fields in JavaScript/TypeScript/Frontend that should support alphanumeric instead of numeric-only",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "javascript",
+        "typescript",
+        "tsx",
+        "jsx"
+      ],
+      "prompt": "prompts/cnpj-js-ts-frontend-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ field/input '{fieldName}' to support alphanumeric format (XX.XXX.XXX/XXXX-XX). Change type='number' to type='text', update TypeScript types from number to string, remove parseInt/parseFloat conversions, update validation to use pattern ^[A-Z0-9]{12}[0-9]{2}$, update masks to accept letters in first 12 positions (AA.AAA.AAA/AAAA-99), and ensure normalization with uppercasing before validation/sending."
+    },
+    {
+      "id": "cnpj-angular-specialist",
+      "description": "Detects CNPJ fields, validators, masks, and formatters in Angular that should support alphanumeric instead of numeric-only",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "angular"
+      ],
+      "maxRetries": 3,
+      "prompt": "prompts/cnpj-angular-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ {component} '{fieldName}' to support alphanumeric format (XX.XXX.XXX/XXXX-XX). If it's a FormControl, change type from number to string. If it's a Validator, update pattern to ^[A-Z0-9]{12}[0-9]{2}$. If it's a Mask, change from numeric-only (99.999.999/9999-99) to alphanumeric (AA.AAA.AAA/AAAA-99). If it's a Pipe, handle string format instead of number. If it's a Template input, change type='number' to type='text' with maxLength=18. Remove Number()/parseInt()/parseFloat() conversions, update custom validators to accept alphanumeric, and ensure normalization with uppercasing before validation/sending."
+    },
+    {
+      "id": "cnpj-sql-ddl-specialist",
+      "description": "Detects CNPJ columns in SQL/DDL that should be VARCHAR instead of numeric types",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "sql"
+      ],
+      "prompt": "prompts/cnpj-sql-ddl-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ column '{objectName}' from numeric type (BIGINT/NUMERIC/INTEGER) to VARCHAR(14) to support alphanumeric CNPJ format (XX.XXX.XXX/XXXX-XX). Add CHECK constraint with pattern ^[A-Z0-9]{12}[0-9]{2}$, remove numeric casts and arithmetic operations, adjust indexes/keys to work with string type, update foreign key relationships, and review/update views and stored procedures that reference this column."
+    },
+    {
+      "id": "cnpj-vb6-specialist",
+      "description": "Detects CNPJ variables/fields in VB6 that should be String instead of numeric types",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "vb",
+        "vb6"
+      ],
+      "prompt": "prompts/cnpj-vb6-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ variable/field '{objectName}' from numeric type (Long/Integer/Double) to String to support alphanumeric CNPJ format (XX.XXX.XXX/XXXX-XX). Remove CLng/CInt/CDbl conversions, update database field types to VARCHAR(14), update MaskedEdit controls to accept alphanumeric (AA.AAA.AAA/AAAA-99), change validation to use pattern ^[A-Z0-9]{12}[0-9]{2}$, and ensure normalization with uppercasing before validation/storage."
+    },
+    {
+      "id": "cnpj-webmethods-specialist",
+      "description": "Detects CNPJ fields in WebMethods (Java, flow.xml, .ndf, .idf) that should be String instead of numeric types",
+      "severity": "warning",
+      "type": "prompt",
+      "languages": [
+        "webmethods",
+        "java",
+        "xml"
+      ],
+      "prompt": "prompts/cnpj-webmethods-specialist.md",
+      "responseMatcher": {
+        "mode": "json-path",
+        "path": "$"
+      },
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the CNPJ field/variable/parameter '{objectName}' from numeric type to String/VARCHAR to support alphanumeric CNPJ format (XX.XXX.XXX/XXXX-XX). For Java code: change Long/Integer/BigInteger to String, update SQL queries, change ResultSet/PreparedStatement calls. For flow.xml: update field type mappings from integer/long/number to string. For .ndf/.idf: change field_type from integer/long/number/numeric/decimal to string. Update database columns to VARCHAR(14), add validation pattern ^[A-Z0-9]{12}[0-9]{2}$, and ensure normalization with uppercasing."
+    },
+    {
+      "id": "codigo-corretor-string-to-integer",
+      "description": "codigoCorretor field declared as String should be converted to Integer",
+      "severity": "critical",
+      "type": "grepped",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "patterns": [
+        {
+          "pattern": "(private|public|protected)\\s+Integer\\s+codigoCorretor\\s*;",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\bInteger\\s+codigoCorretor\\s*;",
+          "flags": "gi",
+          "wordBoundary": false
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the codigoCorretor field from Integer type to String and refactor all class dependencies. Update the field declaration, getters/setters, constructors, builders, validation logic, equals/hashCode, toString methods, mappers/DTOs, JSON/XML serialization, persistence annotations (JPA/Hibernate), SQL/JPQL queries, and all usage sites. Ensure proper type conversion and that the project compiles after the change."
+    },
+	{
+      "id": "codigo-corretor-string-to-integer",
+      "description": "codigoCorretor field declared as String should be converted to Integer",
+      "severity": "critical",
+      "type": "grepped",
+      "languages": ["java", "kotlin"],
+      "patterns": [
+        {
+          "pattern": "(private|public|protected)\\s+String\\s+codigoCorretor\\s*;",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\bString\\s+codigoCorretor\\s*;",
+          "flags": "gi",
+          "wordBoundary": false
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, refactor the codigoCorretor field from String type to Integer and refactor all class dependencies. Update the field declaration, getters/setters, constructors, builders, validation logic, equals/hashCode, toString methods, mappers/DTOs, JSON/XML serialization, persistence annotations (JPA/Hibernate), SQL/JPQL queries, and all usage sites. Ensure proper type conversion and that the project compiles after the change."
+    },
+    {
+      "id": "JAVASCRIPT-cnpj-grep-receive-read-alphanumeric",
+      "description": "Adaptation to receive and read alphanumeric CNPJ - Input masks, validation, formatting, and string manipulation patterns",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript", "html"],
+      "patterns": [
+        {
+          "pattern": "replace\\(/\\\\D/g,\\s*['\"]['\"]\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "limparString\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "(maskCnpj|maskCpf|maskDocumento)\\s*[:=]\\s*\\[.*/\\\\[0-9\\\\]/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "(maskCnpj|maskCpf|maskDocumento)\\s*[:=]\\s*\\[.*/\\\\d/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "maskDocumento\\s*[:=]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\[textMask\\]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\[/\\\\[0-9\\\\]/,.*/\\\\[0-9\\\\]/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "formataDocumento\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.slice\\(0,\\s*2\\)\\s*\\+\\s*['\"]\\.['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "slice\\(0,\\s*2\\).*slice\\(2,\\s*5\\).*slice\\(5,\\s*8\\).*slice\\(8,\\s*12\\).*slice\\(12,\\s*14\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*===\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*!==\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*>\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "\\.length\\s*!==\\s*11\\s*&&\\s*\\.length\\s*!==\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.match\\s*\\(/\\\\d/g\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "/\\\\d+/.test\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "isNaN\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "Number\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "CustomValidators\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "static\\s+documento\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "Valida.*cnpj|Valida.*CNPJ",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento\\s*===\\s*['\"]00000000000['\"]|documento\\s*===\\s*['\"]11111111111['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "tipoDocumento\\s*===\\s*['\"]2['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "tipoDocumento\\s*=\\s*['\"]2['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "length\\s*>\\s*14.*tipoDocumento|length\\s*===\\s*14.*tipoDocumento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "CPF/CNPJ|CPF\\s*ou\\s*CNPJ",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "formControlName\\s*=\\s*['\"]documento['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "type\\s*=\\s*['\"]text['\"].*documento|documento.*type\\s*=\\s*['\"]text['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, adapt code to receive and read alphanumeric CNPJ format. CNPJ now has 14 characters: first 12 positions are alphanumeric (0-9, A-Z uppercase), last 2 positions are numeric (check digits). Update input masks to allow [0-9A-Z] in first 12 positions, preserve alphanumeric characters when cleaning/formatting, and validate format pattern ^[A-Z0-9]{12}[0-9]{2}$ before processing."
+    },
+    {
+      "id": "JAVASCRIPT-cnpj-grep-database-storage-alphanumeric",
+      "description": "Database and API adaptation to store alphanumeric CNPJ format - API calls, data models, and storage patterns",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript"],
+      "patterns": [
+        {
+          "pattern": "buscaSegurado\\s*\\([^)]*tipoDocumento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "segurado\\.documento\\s*=",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "aviso\\.segurado\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento\\s*:\\s*[^,}]+",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "seguradoService\\.(buscaSegurado|setSegurado)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "aviso\\.segurado\\.documento\\s*=",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "utilService\\.limparString\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento.*replace.*\\\\D",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "params\\.documento|request\\.documento|body\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "autenticar\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento.*tipoDocumento|tipoDocumento.*documento",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, ensure database and API operations accept alphanumeric CNPJ format. Before sending CNPJ to API/database, normalize to uppercase and preserve alphanumeric characters (do not strip letters). Verify that database columns and API endpoints accept VARCHAR(14) or equivalent string type for CNPJ, not numeric types. Ensure documento field in request objects maintains alphanumeric format without converting to numbers."
+    },
+    {
+      "id": "JAVASCRIPT-cnpj-grep-check-digit-calculation-alphanumeric",
+      "description": "Check digit calculation routine adaptation for alphanumeric CNPJ - parseInt operations, modulo calculations, and digit verification logic",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript"],
+      "patterns": [
+        {
+          "pattern": "parseInt\\s*\\([^,]+,\\s*[0-9]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt\\s*\\([^)]*\\.charAt\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt\\s*\\([^)]*\\.substring\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "Valida\\s+DVs|digito.*verificador|check.*digit",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "%\\s*11|soma\\s*%\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "resultado\\s*=\\s*soma\\s*%\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt.*documento.*substring|parseInt.*documento.*charAt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "documento\\.substring\\(0,\\s*tamanho\\)|documento\\.substring\\(tamanho\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "documento\\.length\\s*-\\s*2",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "tamanho\\s*=\\s*documento\\.length\\s*-\\s*2",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "numeros\\s*=\\s*documento\\.substring",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "digitos\\s*=\\s*documento\\.substring",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt.*digitos\\.charAt|parseInt.*numeros\\.charAt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "for\\s*\\([^)]*tamanho[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 5
+        },
+        {
+          "pattern": "pos\\s*=\\s*tamanho\\s*-\\s*7",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "if\\s*\\(pos\\s*<\\s*2\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "resultado\\s*!==\\s*parseInt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, update check digit calculation routine for alphanumeric CNPJ. The new algorithm must: 1) Normalize CNPJ to uppercase before calculation, 2) Convert alphanumeric characters (A-Z) to numeric values (A=0, B=1, C=2, ..., Z=25) for positions 0-11, 3) Keep numeric characters (0-9) as-is for positions 0-11, 4) Use numeric values only for check digits (positions 12-13), 5) Apply modulo 11 calculation with the converted numeric values, 6) Validate that check digits match calculated values. Replace all parseInt() calls on alphanumeric positions with a conversion function that maps letters to numbers."
+    }
+  ]
+}

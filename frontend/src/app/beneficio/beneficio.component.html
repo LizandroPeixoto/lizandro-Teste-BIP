@@ -1,0 +1,136 @@
+<div class="container-fluid py-4" style="background: #f4f6f9; min-height: 100vh;">
+  <div class="container">
+
+    <!-- Cabeçalho -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body d-flex justify-content-between align-items-center py-3">
+        <div>
+          <h4 class="mb-0 fw-bold"><i class="bi bi-people-fill text-primary me-2"></i>Beneficiários</h4>
+          <small class="text-muted">Gerencie os beneficiários cadastrados</small>
+        </div>
+        <a routerLink="/transferencia" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left-right me-1"></i>Transferências
+        </a>
+      </div>
+    </div>
+
+    <!-- Alertas -->
+    <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      <span>{{ errorMessage }}</span>
+      <button type="button" class="btn-close ms-auto" (click)="errorMessage=''"></button>
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <!-- Card da tabela -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <span class="fw-semibold text-secondary">Lista de Beneficiários</span>
+        <button class="btn btn-primary btn-sm" (click)="abrirModalIncluir()">
+          <i class="bi bi-plus-circle-fill me-1"></i>Incluir Beneficiário
+        </button>
+      </div>
+
+      <div class="card-body p-0">
+
+        <div *ngIf="loading" class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-2 text-muted">Carregando...</p>
+        </div>
+
+        <table *ngIf="!loading" class="table table-hover table-striped mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th style="width:60px">#</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th style="width:130px">Valor</th>
+              <th class="text-center" style="width:80px">Ativo</th>
+              <th class="text-center" style="width:90px">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="beneficios.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">
+                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                Nenhum beneficiário cadastrado.
+              </td>
+            </tr>
+            <tr *ngFor="let b of beneficios">
+              <td class="text-muted fw-semibold">{{ b.id }}</td>
+              <td class="fw-semibold">{{ b.nome }}</td>
+              <td class="text-muted">{{ b.descricao }}</td>
+              <td>{{ b.valor | currency:'BRL':'symbol':'1.2-2' }}</td>
+              <td class="text-center">
+                <span class="badge rounded-pill" [class.bg-success]="b.ativo" [class.bg-secondary]="!b.ativo">
+                  <i class="bi" [class.bi-check-lg]="b.ativo" [class.bi-x-lg]="!b.ativo"></i>
+                  {{ b.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="text-center text-nowrap">
+                <button class="btn btn-sm btn-outline-warning me-1" (click)="abrirModalEditar(b)" title="Alterar"><i class="bi bi-pencil-fill"></i></button><button class="btn btn-sm btn-outline-danger" (click)="excluir(b.id!)" title="Excluir"><i class="bi bi-trash-fill"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal Bootstrap (controlado via Angular) -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="modalAberto" style="background: rgba(0,0,0,0.5);" (click)="$event.target === $event.currentTarget && cancelarModal()">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi" [class.bi-plus-circle]="modalModo==='criar'" [class.bi-pencil-square]="modalModo==='editar'" class="me-2"></i>
+          {{ modalModo === 'criar' ? 'Novo Beneficiário' : 'Alterar Beneficiário' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="cancelarModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="errorMessage" class="alert alert-danger alert-sm">
+          <i class="bi bi-exclamation-circle me-1"></i>{{ errorMessage }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+          <input [(ngModel)]="modalBeneficio.nome" class="form-control" placeholder="Nome do beneficiário" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Descrição</label>
+          <input [(ngModel)]="modalBeneficio.descricao" class="form-control" placeholder="Descrição" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Valor <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text">R$</span>
+            <input [(ngModel)]="modalBeneficio.valor" type="number" step="0.01" min="0" class="form-control" placeholder="0,00" />
+          </div>
+        </div>
+        <div class="form-check form-switch">
+          <input [(ngModel)]="modalBeneficio.ativo" type="checkbox" class="form-check-input" id="ativoCheck" role="switch" />
+          <label class="form-check-label fw-semibold" for="ativoCheck">Ativo</label>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" (click)="cancelarModal()">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
+        <button class="btn btn-success" (click)="confirmarModal()">
+          <i class="bi bi-check-circle me-1"></i>Confirmar
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

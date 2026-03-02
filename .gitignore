@@ -1,0 +1,20 @@
+# Node / Angular
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+# Maven / Java
+**/target/
+**/.classpath
+**/.project
+**/.settings/
+**/mvn-wrapper.jar
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+Thumbs.db
+.DS_Store

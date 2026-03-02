@@ -1,0 +1,335 @@
+{
+  "rules": [
+    {
+      "id": "JAVASCRIPT-cnpj-grep-receive-read-alphanumeric",
+      "description": "Adaptation to receive and read alphanumeric CNPJ - Input masks, validation, formatting, and string manipulation patterns",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript", "html"],
+      "patterns": [
+        {
+          "pattern": "replace\\(/\\\\D/g,\\s*['\"]['\"]\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "limparString\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "(maskCnpj|maskCpf|maskDocumento)\\s*[:=]\\s*\\[.*/\\\\[0-9\\\\]/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "(maskCnpj|maskCpf|maskDocumento)\\s*[:=]\\s*\\[.*/\\\\d/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "maskDocumento\\s*[:=]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\[textMask\\]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\[/\\\\[0-9\\\\]/,.*/\\\\[0-9\\\\]/.*\\]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "formataDocumento\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.slice\\(0,\\s*2\\)\\s*\\+\\s*['\"]\\.['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "slice\\(0,\\s*2\\).*slice\\(2,\\s*5\\).*slice\\(5,\\s*8\\).*slice\\(8,\\s*12\\).*slice\\(12,\\s*14\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*===\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*!==\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.length\\s*>\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "\\.length\\s*!==\\s*11\\s*&&\\s*\\.length\\s*!==\\s*14",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "\\.match\\s*\\(/\\\\d/g\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "/\\\\d+/.test\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "isNaN\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "Number\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "CustomValidators\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "static\\s+documento\\s*\\([^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "Valida.*cnpj|Valida.*CNPJ",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento\\s*===\\s*['\"]00000000000['\"]|documento\\s*===\\s*['\"]11111111111['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "tipoDocumento\\s*===\\s*['\"]2['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "tipoDocumento\\s*=\\s*['\"]2['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "length\\s*>\\s*14.*tipoDocumento|length\\s*===\\s*14.*tipoDocumento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "CPF/CNPJ|CPF\\s*ou\\s*CNPJ",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "formControlName\\s*=\\s*['\"]documento['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "type\\s*=\\s*['\"]text['\"].*documento|documento.*type\\s*=\\s*['\"]text['\"]",
+          "flags": "gi",
+          "wordBoundary": false
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, adapt code to receive and read alphanumeric CNPJ format. CNPJ now has 14 characters: first 12 positions are alphanumeric (0-9, A-Z uppercase), last 2 positions are numeric (check digits). Update input masks to allow [0-9A-Z] in first 12 positions, preserve alphanumeric characters when cleaning/formatting, and validate format pattern ^[A-Z0-9]{12}[0-9]{2}$ before processing."
+    },
+    {
+      "id": "JAVASCRIPT-cnpj-grep-database-storage-alphanumeric",
+      "description": "Database and API adaptation to store alphanumeric CNPJ format - API calls, data models, and storage patterns",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript"],
+      "patterns": [
+        {
+          "pattern": "buscaSegurado\\s*\\([^)]*tipoDocumento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "segurado\\.documento\\s*=",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "aviso\\.segurado\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento\\s*:\\s*[^,}]+",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        },
+        {
+          "pattern": "seguradoService\\.(buscaSegurado|setSegurado)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "aviso\\.segurado\\.documento\\s*=",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "utilService\\.limparString\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento.*replace.*\\\\D",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "params\\.documento|request\\.documento|body\\.documento",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "autenticar\\s*\\([^)]*documento[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "documento.*tipoDocumento|tipoDocumento.*documento",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 2
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, ensure database and API operations accept alphanumeric CNPJ format. Before sending CNPJ to API/database, normalize to uppercase and preserve alphanumeric characters (do not strip letters). Verify that database columns and API endpoints accept VARCHAR(14) or equivalent string type for CNPJ, not numeric types. Ensure documento field in request objects maintains alphanumeric format without converting to numbers."
+    },
+    {
+      "id": "JAVASCRIPT-cnpj-grep-check-digit-calculation-alphanumeric",
+      "description": "Check digit calculation routine adaptation for alphanumeric CNPJ - parseInt operations, modulo calculations, and digit verification logic",
+      "severity": "error",
+      "type": "grepped",
+      "languages": ["typescript", "javascript"],
+      "patterns": [
+        {
+          "pattern": "parseInt\\s*\\([^,]+,\\s*[0-9]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt\\s*\\([^)]*\\.charAt\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt\\s*\\([^)]*\\.substring\\s*\\([^)]+\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "Valida\\s+DVs|digito.*verificador|check.*digit",
+          "flags": "gi",
+          "wordBoundary": false
+        },
+        {
+          "pattern": "%\\s*11|soma\\s*%\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "resultado\\s*=\\s*soma\\s*%\\s*11",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt.*documento.*substring|parseInt.*documento.*charAt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "documento\\.substring\\(0,\\s*tamanho\\)|documento\\.substring\\(tamanho\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "documento\\.length\\s*-\\s*2",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "tamanho\\s*=\\s*documento\\.length\\s*-\\s*2",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "numeros\\s*=\\s*documento\\.substring",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "digitos\\s*=\\s*documento\\.substring",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "parseInt.*digitos\\.charAt|parseInt.*numeros\\.charAt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "for\\s*\\([^)]*tamanho[^)]*\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 5
+        },
+        {
+          "pattern": "pos\\s*=\\s*tamanho\\s*-\\s*7",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "if\\s*\\(pos\\s*<\\s*2\\)",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        },
+        {
+          "pattern": "resultado\\s*!==\\s*parseInt",
+          "flags": "gi",
+          "wordBoundary": false,
+          "contextLines": 3
+        }
+      ],
+      "codexPrompt": "In {filePath}, lines {startLine}-{endLine}, update check digit calculation routine for alphanumeric CNPJ. The new algorithm must: 1) Normalize CNPJ to uppercase before calculation, 2) Convert alphanumeric characters (A-Z) to numeric values (A=0, B=1, C=2, ..., Z=25) for positions 0-11, 3) Keep numeric characters (0-9) as-is for positions 0-11, 4) Use numeric values only for check digits (positions 12-13), 5) Apply modulo 11 calculation with the converted numeric values, 6) Validate that check digits match calculated values. Replace all parseInt() calls on alphanumeric positions with a conversion function that maps letters to numbers."
+    }
+  ]
+}

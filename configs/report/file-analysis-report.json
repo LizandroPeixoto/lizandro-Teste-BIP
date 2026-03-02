@@ -1,0 +1,45 @@
+{
+  "reportName": "Análise SAP ABAP - Mapeamento de Programas e Funcionalidades",
+  "prompt": "report/file-analysis.md",
+  "columns": [
+    {
+      "name": "reportName"
+    },
+    {
+      "name": "functionalitySummary"
+    },
+    {
+      "name": "databaseOperations"
+    },
+    {
+      "name": "bapisAndFunctionModules"
+    },
+    {
+      "name": "callTransaction"
+    },
+    {
+      "name": "remoteFunctionCall"
+    },
+    {
+      "name": "submit"
+    },
+    {
+      "name": "fileManipulation"
+    },
+    {
+      "name": "displayMethod"
+    },
+    {
+      "name": "alvButtons"
+    },
+    {
+      "name": "alvHotspot"
+    },
+    {
+      "name": "accessedTables"
+    }
+  ],
+  "extensions": [".txt"],
+  "groupByDirectory": true,
+  "summaryPrompt": "report/summary-prompt.md"
+}
